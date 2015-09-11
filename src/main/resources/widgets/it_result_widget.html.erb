@@ -1,0 +1,277 @@
+<%
+   it_coverage=measure('it_coverage')
+   overall_coverage=measure('overall_coverage')
+
+   tests_measure=measure('it_tests')
+   execution_time=measure('it_test_execution_time')
+   success_percentage=measure('it_test_success_density')
+   failures=measure('it_test_failures')
+   skipped=measure('it_skipped_tests')
+   errors=measure('it_test_errors')
+
+   if it_coverage || overall_coverage || tests_measure
+-%>
+  <div class="widget-row">
+
+  <% if it_coverage -%>
+    <div class="widget-span widget-span-6">
+      <div class="widget-measure-container">
+
+        <div class="widget-measure widget-measure-main">
+          <span class="widget-label"><%= message('widget.it-coverage.name') -%></span>
+            <span class="nowrap">
+              <%= format_measure(it_coverage, :url => url_for_drilldown('it_coverage'), :default => '-') %>
+              <%= format_variation(it_coverage) if dashboard_configuration.selected_period? -%>
+            </span>
+        </div>
+
+        <%
+           it_line_coverage=measure('it_line_coverage')
+           if it_line_coverage
+        %>
+          <div class="widget-measure">
+            <span class="widget-label"><%= message('widget.it-coverage.line_coverage.suffix') -%></span>
+              <span class="nowrap">
+                <%= format_measure(it_line_coverage, :url => url_for_drilldown('it_uncovered_lines', :highlight => 'it_line_coverage')) %>
+                <%= format_variation(it_line_coverage) if dashboard_configuration.selected_period? -%>
+              </span>
+          </div>
+        <% end %>
+
+        <%
+           it_branch_coverage=measure('it_branch_coverage')
+           if it_branch_coverage
+        %>
+          <div class="widget-measure">
+            <span class="widget-label"><%= message('widget.it-coverage.condition_coverage.suffix') -%></span>
+              <span class="nowrap">
+                <%= format_measure(it_branch_coverage, :url => url_for_drilldown('it_uncovered_conditions', :highlight => 'it_branch_coverage')) %>
+                <%= format_variation(it_branch_coverage) if dashboard_configuration.selected_period? -%>
+              </span>
+          </div>
+        <% end %>
+
+        <%
+           if dashboard_configuration.selected_period?
+             new_lines_to_cover_measure=measure('new_it_lines_to_cover')
+             if new_lines_to_cover_measure
+               new_lines=new_lines_to_cover_measure.variation(dashboard_configuration.period_index)
+               if new_lines
+                 new_coverage=measure('new_it_coverage')
+                 new_line_coverage=measure('new_it_line_coverage')
+                 new_branch_coverage=measure('new_it_branch_coverage')
+        %>
+              <% if new_lines.to_i==0 %>
+                <div class="widget-measure widget-measure-main">
+                  <span class="widget-label"><%= message('widget.it-coverage.on_new_code') -%></span>
+
+                  <p><%= message('widget.it-coverage.no_new_lines_to_cover') -%></p>
+                </div>
+              <% else %>
+
+                <% if new_coverage %>
+                  <div class="widget-measure widget-measure-main">
+                    <span class="widget-label"><%= message('widget.it-coverage.on_new_code') -%></span>
+                      <span class="nowrap">
+                        <%= format_measure(new_coverage,
+                                           :period => dashboard_configuration.period_index,
+                                           :url => url_for_drilldown(new_coverage, :period => dashboard_configuration.period_index),
+                                           :default => '-') %>
+                      </span>
+                  </div>
+                <% end %>
+
+                <% if new_line_coverage %>
+                  <div class="widget-measure">
+                    <span class="widget-label"><%= message('widget.it-coverage.line_coverage.suffix') -%></span>
+                      <span class="nowrap">
+                        <%= format_measure(new_line_coverage,
+                                           :period => dashboard_configuration.period_index,
+                                           :url => url_for_drilldown(new_line_coverage, :period => dashboard_configuration.period_index)) %>
+                      </span>
+                  </div>
+                <% end %>
+
+                <% if new_branch_coverage %>
+                  <div class="widget-measure">
+                    <span class="widget-label"><%= message('widget.it-coverage.condition_coverage.suffix') -%></span>
+                      <span class="nowrap">
+                        <%= format_measure(new_branch_coverage,
+                                           :period => dashboard_configuration.period_index,
+                                           :url => url_for_drilldown(new_branch_coverage, :period => dashboard_configuration.period_index)) %>
+                      </span>
+                  </div>
+                <% end %>
+
+              <% end %>
+
+            <% end %>
+          <% end %>
+        <% end %>
+
+      </div>
+    </div>
+  <% end %>
+
+  <% if overall_coverage -%>
+    <div class="widget-span widget-span-6">
+      <div class="widget-measure-container">
+
+        <div class="widget-measure widget-measure-main">
+          <span class="widget-label"><%= message('widget.overall-coverage.name') -%></span>
+            <span class="nowrap">
+              <%= format_measure(overall_coverage, :url => url_for_drilldown('overall_coverage'), :default => '-') %>
+              <%= format_variation(overall_coverage) if dashboard_configuration.selected_period? -%>
+            </span>
+        </div>
+
+        <%
+           overall_line_coverage=measure('overall_line_coverage')
+           if overall_line_coverage
+        %>
+          <div class="widget-measure">
+            <span class="widget-label"><%= message('widget.overall-coverage.line_coverage.suffix') -%></span>
+              <span class="nowrap">
+                <%= format_measure(overall_line_coverage, :url => url_for_drilldown('overall_uncovered_lines', :highlight => 'overall_line_coverage')) %>
+                <%= format_variation(overall_line_coverage) if dashboard_configuration.selected_period? -%>
+              </span>
+          </div>
+        <% end %>
+
+        <%
+           overall_branch_coverage=measure('overall_branch_coverage')
+           if overall_branch_coverage
+        %>
+          <div class="widget-measure">
+            <span class="widget-label"><%= message('widget.overall-coverage.condition_coverage.suffix') -%></span>
+              <span class="nowrap">
+                <%= format_measure(overall_branch_coverage, :url => url_for_drilldown('overall_uncovered_conditions', :highlight => 'overall_branch_coverage')) %>
+                <%= format_variation(overall_branch_coverage) if dashboard_configuration.selected_period? -%>
+              </span>
+          </div>
+        <% end %>
+
+        <%
+           if dashboard_configuration.selected_period?
+             new_lines_to_cover_measure=measure('new_overall_lines_to_cover')
+             if new_lines_to_cover_measure
+               new_lines=new_lines_to_cover_measure.variation(dashboard_configuration.period_index)
+               if new_lines
+                 new_coverage=measure('new_overall_coverage')
+                 new_line_coverage=measure('new_overall_line_coverage')
+                 new_branch_coverage=measure('new_overall_branch_coverage')
+        %>
+              <% if new_lines.to_i==0 %>
+                <div class="widget-measure widget-measure-main">
+                  <span class="widget-label"><%= message('widget.overall-coverage.on_new_code') -%></span>
+
+                  <p><%= message('widget.overall-coverage.no_new_lines_to_cover') -%></p>
+                </div>
+              <% else %>
+
+                <% if new_coverage %>
+                  <div class="widget-measure widget-measure-main">
+                    <span class="widget-label"><%= message('widget.overall-coverage.on_new_code') -%></span>
+                      <span class="nowrap">
+                        <%= format_measure(new_coverage,
+                                           :period => dashboard_configuration.period_index,
+                                           :url => url_for_drilldown(new_coverage, :period => dashboard_configuration.period_index),
+                                           :default => '-') %>
+                        <%= format_variation(new_coverage) if dashboard_configuration.selected_period? -%>
+                      </span>
+                  </div>
+                <% end %>
+
+                <% if new_line_coverage %>
+                  <div class="widget-measure">
+                    <span class="widget-label"><%= message('widget.overall-coverage.line_coverage.suffix') -%></span>
+                      <span class="nowrap">
+                        <%= format_measure(new_line_coverage,
+                                           :period => dashboard_configuration.period_index,
+                                           :url => url_for_drilldown(new_line_coverage, :period => dashboard_configuration.period_index)) %>
+                        <%= format_variation(new_line_coverage) if dashboard_configuration.selected_period? -%>
+                      </span>
+                  </div>
+                <% end %>
+
+                <% if new_branch_coverage %>
+                  <div class="widget-measure">
+                    <span class="widget-label"><%= message('widget.overall-coverage.condition_coverage.suffix') -%></span>
+                      <span class="nowrap">
+                        <%= format_measure(new_branch_coverage,
+                                           :period => dashboard_configuration.period_index,
+                                           :url => url_for_drilldown(new_branch_coverage, :period => dashboard_configuration.period_index)) %>
+                        <%= format_variation(new_branch_coverage) if dashboard_configuration.selected_period? -%>
+                      </span>
+                  </div>
+                <% end %>
+
+              <% end %>
+
+            <% end %>
+          <% end %>
+        <% end %>
+
+      </div>
+    </div>
+  <% end %>
+
+  <% if tests_measure %>
+    <div class="widget-span widget-span-6">
+        <div class="widget-measure-container">
+          <div class="widget-measure widget-measure-main">
+            <span class="widget-label"><%= message('widget.it_results.test_success') -%></span>
+            <span class="nowrap">
+              <%= format_measure(success_percentage, :url => url_for_drilldown(success_percentage)) %>
+              <%= format_variation(success_percentage) if dashboard_configuration.selected_period? -%>
+            </span>
+          </div>
+
+          <div class="widget-measure">
+            <span class="widget-label"><%= message('widget.it_results.failures.suffix') -%></span>
+            <span class="nowrap">
+              <%= format_measure(failures, :url => url_for_drilldown(failures)) %>
+              <%= format_variation(failures) if dashboard_configuration.selected_period? -%>
+            </span>
+          </div>
+
+          <div class="widget-measure">
+            <span class="widget-label"><%= message('widget.it_results.errors.suffix') -%></span>
+            <span class="nowrap">
+              <%= format_measure(errors, :url => url_for_drilldown(errors)) %>
+              <%= format_variation(errors) if dashboard_configuration.selected_period? -%>
+            </span>
+          </div>
+
+          <div class="widget-measure">
+            <span class="widget-label"><%= message('widget.it_results.tests.suffix') -%></span>
+            <span class="nowrap">
+              <%= format_measure(tests_measure, :url => url_for_drilldown(tests_measure)) %>
+              <%= format_variation(tests_measure) if dashboard_configuration.selected_period? -%>
+            </span>
+          </div>
+
+          <%
+             if dashboard_configuration.selected_period? || (skipped && skipped.value && skipped.value>0)
+          %>
+            <div class="widget-measure">
+              <span class="widget-label"><%= message('widget.it_results.skipped.suffix') -%></span>
+              <span class="nowrap">
+                <%= format_measure(skipped, :url => url_for_drilldown(skipped)) %>
+                <%= format_variation(skipped) if dashboard_configuration.selected_period? -%>
+              </span>
+            </div>
+          <% end %>
+
+          <div class="widget-measure">
+            <span class="widget-label"><%= message('widget.it_results.execution_time') -%></span>
+            <span class="nowrap">
+              <%= format_measure(execution_time, :url => url_for_drilldown(execution_time)) %>
+              <%= format_variation(execution_time) if dashboard_configuration.selected_period? -%>
+            </span>
+          </div>
+        </div>
+    </div>
+  <% end %>
+  </div>
+<% end %>
