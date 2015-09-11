@@ -1,5 +1,5 @@
 # sonar-javascript-integrationtests
-> Extends SonarQube with integration tests results for javascript projects (tested with SonarQube 5.1.2).
+> Extends SonarQube with integration tests results (number of tests, success percentage etc.) for javascript projects (tested with SonarQube 5.1.2).
 
 ## Usage
 - Upload the plugin jar to the SonarQube 'extensions/plugins' folder.
