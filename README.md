@@ -3,7 +3,7 @@
 
 ## Usage
 - Upload the plugin jar to the SonarQube 'extensions/plugins' folder.
-- Use the sonar property 'sonar.javascript.jstestdriver.itReportsPath' to point to the directory containing surefire reports. The plugin will scan for reports prefixed with 'IUNIT-'
+- Use the sonar property 'sonar.javascript.jstestdriver.itReportsPath' to point to the directory containing surefire reports. The plugin will scan for reports prefixed with 'ITESTS-'
 - Add the 'Integration Tests Results' widget to your dashboard (this widget also shows coverage information so you don't have to use two widgets for integration tests)
 
 *The grunt-karma-sonar plugin (https://github.com/mdasberg/grunt-karma-sonar) supports the generation of reports that can be processed by this plugin.*
